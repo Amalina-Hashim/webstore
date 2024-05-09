@@ -83,7 +83,7 @@ const Payment = () => {
           <Form.Control
             type="number"
             name="amount"
-            value={paymentInfo.amount}
+            value={parseFloat(paymentInfo.amount).toFixed(2)}
             readOnly
           />
         </Form.Group>
