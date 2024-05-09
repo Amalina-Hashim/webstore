@@ -15,25 +15,25 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("handleSubmit called"); 
     e.preventDefault();
     try {
       const response = await userLogin(formData);
-      console.log("Login Response:", response); 
+      console.log("Login Response:", response);
 
       if (response && response.token && response.userId) {
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.userId);
         localStorage.setItem("userName", response.userName);
-       
+
         window.location.href = "/";
       } else {
         console.error("Token or user ID not found in login response");
       }
     } catch (error) {
-      console.error("Login failed:", error); 
+      console.error("Login failed:", error);
     }
   };
-
 
   return (
     <div className="container mt-5">

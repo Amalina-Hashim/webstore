@@ -10,16 +10,16 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [cartItemCount, setCartItemCount] = useState(0);
 
-    useEffect(() => {
-      const storedCartItems = localStorage.getItem("cartItems");
-      if (storedCartItems) {
-        setCartItemCount(parseInt(storedCartItems));
-      }
-    }, []);
+  useEffect(() => {
+    const storedCartItems = localStorage.getItem("cartItems");
+    if (storedCartItems) {
+      setCartItemCount(parseInt(storedCartItems));
+    }
+  }, []);
 
-   useEffect(() => {
-     console.log("cartItemCount changed:", cartItemCount);
-   }, [cartItemCount]);
+  useEffect(() => {
+    console.log("cartItemCount changed:", cartItemCount);
+  }, [cartItemCount]);
 
   useEffect(() => {
     const checkLoggedInStatus = () => {
@@ -29,7 +29,8 @@ const Header = () => {
         const userData = localStorage.getItem("user");
         if (userData) {
           try {
-            setUser(JSON.parse(userData));
+            const parsedUserData = JSON.parse(userData);
+            setUser({ username: parsedUserData.username }); 
           } catch (error) {
             console.error("Error parsing user data:", error);
           }
@@ -40,6 +41,7 @@ const Header = () => {
         setUser(null);
       }
     };
+
     checkLoggedInStatus();
     window.addEventListener("storage", checkLoggedInStatus);
     return () => {
@@ -61,20 +63,20 @@ const Header = () => {
     };
   }, []);
 
-useEffect(() => {
-  const updateCartCount = () => {
-    const newCount = parseInt(localStorage.getItem("cartItems") || "0");
-    setCartItemCount(newCount);
-  };
+  useEffect(() => {
+    const updateCartCount = () => {
+      const newCount = parseInt(localStorage.getItem("cartItems") || "0");
+      setCartItemCount(newCount);
+    };
 
-  window.addEventListener("cartUpdated", updateCartCount);
+    window.addEventListener("cartUpdated", updateCartCount);
 
-  updateCartCount();
+    updateCartCount();
 
-  return () => {
-    window.removeEventListener("cartUpdated", updateCartCount);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
+  }, []);
 
   const handleLogout = async () => {
     try {

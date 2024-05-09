@@ -21,7 +21,6 @@ function App() {
       <AuthProvider>
         <Header />
         <Routes>
-          <Route path="*" element={<Home />} /> 
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
@@ -35,6 +34,8 @@ function App() {
           <Route path="/cart" element={<CartPage />} />{" "}
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Home />} />
         </Routes>
       </AuthProvider>
     </Router>

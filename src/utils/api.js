@@ -4,11 +4,10 @@ const baseURL = "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL,
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 const getToken = () => localStorage.getItem("token");
-
 
 export const getAllProducts = async () => {
   const response = await api.get("/products/all");
@@ -67,7 +66,7 @@ export const removeFromFavorites = async (productId, token) => {
       },
       options
     );
-   console.log("Entire Response Object:", response); 
+    console.log("Entire Response Object:", response);
     return response.data;
   } catch (error) {
     console.error("Error removing from favorites:", error);
@@ -110,16 +109,17 @@ export const userLogin = async (userData) => {
     console.log("Login Response:", response);
 
     const token = response.data.token;
-    const userId = response.data.user._id.toString(); 
-    const userName = response.data.user.name; 
+    const userId = response.data.user._id.toString();
+    const userName = response.data.user.username;
 
     if (!token || !userId) {
       throw new Error("Token or user ID not found in login response data");
     }
 
     localStorage.setItem("token", token);
-    localStorage.setItem("userId", userId); 
+    localStorage.setItem("userId", userId);
     localStorage.setItem("userName", userName);
+    localStorage.setItem("user", JSON.stringify({ username: userName }));
     console.log(
       "Token stored in local storage:",
       localStorage.getItem("token")
@@ -133,7 +133,7 @@ export const userLogin = async (userData) => {
       localStorage.getItem("userName")
     );
 
-    return { token, userId, userName }; 
+    return { token, userId, userName };
   } catch (error) {
     console.error("Login failed:", error);
     throw new Error("Login failed");
@@ -145,14 +145,14 @@ export const userLogout = async () => {
     const token = localStorage.getItem("token");
     const response = await api.post(
       "/users/logout",
-      { token }, 
+      { token },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    
+
     localStorage.removeItem("cart");
     localStorage.removeItem("userId");
     localStorage.removeItem("cartItemCount");
@@ -189,9 +189,9 @@ export const addToCart = async (
       const cartItemCount = updatedCartData.reduce(
         (total, item) => total + item.quantity,
         0
-      ); 
-      localStorage.setItem("cartItems", cartItemCount); 
-      setCartItemCount(cartItemCount); 
+      );
+      localStorage.setItem("cartItems", cartItemCount);
+      setCartItemCount(cartItemCount);
       return response.data;
     } else {
       throw new Error("Error adding to cart: No response");
@@ -207,7 +207,6 @@ export const checkout = async (userId, products, orderId) => {
   return response.data;
 };
 
-
 export const makePayment = async (paymentData) => {
   try {
     const token = localStorage.getItem("token");
@@ -217,10 +216,7 @@ export const makePayment = async (paymentData) => {
       },
     };
 
-    const response = await api.post(
-      "/payment/make-payment",
-      paymentData, 
-    );
+    const response = await api.post("/payment/make-payment", paymentData);
 
     console.log("Payment data sent to Stripe:", paymentData);
     localStorage.removeItem("cart");
@@ -282,10 +278,10 @@ export const getAllOrders = async () => {
 
 export const getUserInfo = async () => {
   try {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
     const response = await api.get("/users/profile", {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -296,10 +292,10 @@ export const getUserInfo = async () => {
 };
 
 export const updateUserProfile = async (userData) => {
-  const token = getToken(); 
+  const token = getToken();
   const response = await api.put("/users/profile", userData, {
     headers: {
-      Authorization: `Bearer ${token}`, 
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
@@ -334,7 +330,7 @@ export const getFavoriteProducts = async () => {
     }
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      return []; 
+      return [];
     } else {
       console.error("Error getting favorites:", error);
       throw new Error("Error getting favorites");
@@ -357,6 +353,5 @@ export const getOrdersByUserId = async (userId) => {
     throw new Error("Error getting orders");
   }
 };
-
 
 export default api;

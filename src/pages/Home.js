@@ -21,7 +21,9 @@ const Home = () => {
       >
         <Container>
           <Card.Body>
-            <Card.Title>Welcome to our Ecommerce Store</Card.Title>
+            <Card.Title>
+              Welcome to our Ecommerce Store
+            </Card.Title>
             <Card.Text>
               Discover the latest trends and shop your favorite products!
             </Card.Text>
