@@ -5,7 +5,7 @@ import FavoriteList from "../components/FavoriteList";
 
 const Favorites = () => {
   return (
-    <div className= "mt-2">
+    <div className= "mt-4">
       <Container>
         <Routes>
           <Route path="/" element={<FavoriteList />} />
