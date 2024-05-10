@@ -120,11 +120,11 @@ const handleAddToCart = async () => {
         </>
       )}
       <div className="card mx-3">
-        <div className="row no-gutters">
+        <div className="row g-0">
           <div className="col-md-4">
             <img
               src={product.images[0]}
-              className="card-img"
+              className="img-fluid rounded-start h-100"
               alt={product.name}
             />
           </div>
