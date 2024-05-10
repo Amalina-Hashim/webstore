@@ -39,7 +39,7 @@ const ProductList = ({ favoritesOnly, userId }) => {
   };
 
   return (
-    <div className="mx-4 mt-2">
+    <div className="mx-4 mt-4">
       <h4 className="mb-4">{getTitle()}</h4>
       <div className="row">
         {products.map((product) => (
