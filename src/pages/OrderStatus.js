@@ -26,7 +26,7 @@ const OrderStatus = () => {
       {orders.map((order) => (
         <Card className="mb-3" key={order.orderId}>
           <Card.Body>
-            <Card.Title>Order ID: {order._id}</Card.Title>
+            <Card.Title>Order ID: {order.orderId}</Card.Title>
             <ListGroup variant="flush">
               {order.items.map((item, index) => (
                 <Card key={index} style={{ marginBottom: "10px" }}>
