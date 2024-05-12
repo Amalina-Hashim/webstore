@@ -155,6 +155,7 @@ export const userLogout = async () => {
 
     localStorage.removeItem("cart");
     localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
     localStorage.removeItem("cartItemCount");
     localStorage.removeItem("cartItems");
     localStorage.removeItem("totalAmount");

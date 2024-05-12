@@ -97,7 +97,7 @@ const handleAddToCart = async () => {
 
   return (
     <div>
-      <h2 className="mb-4 mx-3">Product Detail</h2>
+      <h2 className="mb-4 mx-3 mt-3">Product Detail</h2>
       <Button
         variant="secondary"
         onClick={() => navigate(-1)}
