@@ -12,7 +12,7 @@ const Home = () => {
           backgroundImage: `url(https://images.pexels.com/photos/325876/pexels-photo-325876.jpeg)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "60vh", // Adjust the height as needed
+          minHeight: "60vh", 
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

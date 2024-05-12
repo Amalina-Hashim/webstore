@@ -41,10 +41,8 @@ const ProductDetail = () => {
       updateCartItemCount(setCartItemCount);
     };
 
-    // Add event listener for storage changes
     window.addEventListener("storage", handleStorageChange);
 
-    // Cleanup function to remove event listener
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
@@ -84,7 +82,7 @@ const handleAddToCart = async () => {
     );
     const newCount = parseInt(localStorage.getItem("cartItems") || "0");
     setCartItemCount(newCount);
-    updateCartItemCount(setCartItemCount); // Add this line
+    updateCartItemCount(setCartItemCount); 
   } catch (error) {
     console.error("Error adding to cart:", error);
   }

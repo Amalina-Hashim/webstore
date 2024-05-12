@@ -41,7 +41,6 @@ const Checkout = () => {
           }
         });
         setCartData(Object.values(groupedData));
-        // Calculate total amount based on quantity and subtotal
         const total = Object.values(groupedData).reduce((acc, item) => {
           return acc + item.quantity * item.product.price;
         }, 0);
