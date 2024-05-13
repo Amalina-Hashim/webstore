@@ -66,7 +66,7 @@ const Cart = () => {
         const cartItemCount = updatedCartData.length;
         localStorage.setItem("cartItems", cartItemCount); 
         await updateCartItemCount(setCartItemCount, cartItemCount);
-        window.dispatchEvent(new Event("storage")); 
+        window.dispatchEvent(new CustomEvent("cartUpdated")); 
       }
     }
   };
