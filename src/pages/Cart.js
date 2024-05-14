@@ -33,6 +33,10 @@ const Cart = () => {
             }
           });
           setCartData(Object.values(groupedData));
+          localStorage.setItem(
+            "cart",
+            JSON.stringify(Object.values(groupedData))
+          ); 
           setTotalAmount(data.cart.totalAmount);
         } else {
           setCartData([]);

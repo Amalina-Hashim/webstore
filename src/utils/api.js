@@ -169,6 +169,7 @@ export const userLogout = async () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("cartItemCount");
     localStorage.removeItem("cartItems");
+    localStorage.removeItem("cartId");
     localStorage.removeItem("totalAmount");
 
     return response.data;

@@ -70,6 +70,7 @@ const Payment = () => {
       } else {
         console.error("Cart data not found.");
       }
+       localStorage.removeItem("cart");
     } catch (error) {
       console.error(error);
     }
