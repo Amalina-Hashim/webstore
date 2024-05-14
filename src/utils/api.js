@@ -120,6 +120,13 @@ export const userLogin = async (userData) => {
     localStorage.setItem("userId", userId);
     localStorage.setItem("userName", userName);
     localStorage.setItem("user", JSON.stringify({ username: userName }));
+
+    const cartData = await getUserCart(userId);
+    if (cartData && cartData.cart && cartData.cart.products) {
+      const cartCount = cartData.cart.products.length;
+      localStorage.setItem("cartItems", cartCount);
+    }
+
     console.log(
       "Token stored in local storage:",
       localStorage.getItem("token")
@@ -131,6 +138,10 @@ export const userLogin = async (userData) => {
     console.log(
       "User Name stored in local storage:",
       localStorage.getItem("userName")
+    );
+    console.log(
+      "Cart count stored in local storage:",
+      localStorage.getItem("cartItems")
     );
 
     return { token, userId, userName };
@@ -242,7 +253,7 @@ export const clearCart = async (userId) => {
   }
 };
 
-export const removeFromCart = async (userId, productId) => {
+export const removeFromCart = async (userId, productId, cartId) => {
   try {
     const token = localStorage.getItem("token");
     const headers = {
@@ -252,7 +263,7 @@ export const removeFromCart = async (userId, productId) => {
     };
     const response = await api.post(
       "/cart/remove-from-cart",
-      { userId, productId },
+      { userId, productId, cartId },
       headers
     );
     return response.data;

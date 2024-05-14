@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Container, Table, Button } from "react-bootstrap";
 import { updateCartItemCount } from "../utils/cartUtils";
 
+
 const Cart = () => {
   const [cartData, setCartData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [, setCartItemCount] = useState(0);
+  const [cartId, setCartId] = useState(null); 
   
   const navigate = useNavigate();
 
@@ -17,6 +19,8 @@ const Cart = () => {
       if (userId) {
         const data = await getUserCart(userId);
         if (data && data.cart && data.cart.products) {
+          setCartId(data.cart._id);
+          localStorage.setItem("cartId", data.cart._id);
           const groupedData = {};
           data.cart.products.forEach((product) => {
             if (groupedData[product.product._id]) {
@@ -31,22 +35,27 @@ const Cart = () => {
           setCartData(Object.values(groupedData));
           setTotalAmount(data.cart.totalAmount);
         } else {
-          setCartData([]); 
+          setCartData([]);
         }
       }
     };
     fetchCartData();
   }, []);
 
-  const handleRemoveFromCart = async (productId) => {
+  const handleRemoveFromCart = async (productId, passedCartId) => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     console.log("Attempting to remove from cart");
-    if (userId && token) {
+    if (userId && token && passedCartId) {
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-      const response = await removeFromCart(userId, productId, headers);
+      const response = await removeFromCart(
+        userId,
+        productId,
+        passedCartId,
+        headers
+      );
       console.log("Response from removeFromCart:", response);
       if (response && response.message === "Product removed from cart") {
         const updatedCartData = cartData
@@ -55,18 +64,18 @@ const Cart = () => {
               if (item.quantity > 1) {
                 return { ...item, quantity: item.quantity - 1 };
               } else {
-                return null; 
+                return null;
               }
             }
             return item;
           })
-          .filter((item) => item !== null); 
-        setCartData(updatedCartData); 
-        localStorage.setItem("cart", JSON.stringify(updatedCartData)); 
+          .filter((item) => item !== null);
+        setCartData(updatedCartData);
+        localStorage.setItem("cart", JSON.stringify(updatedCartData));
         const cartItemCount = updatedCartData.length;
-        localStorage.setItem("cartItems", cartItemCount); 
+        localStorage.setItem("cartItems", cartItemCount);
         await updateCartItemCount(setCartItemCount, cartItemCount);
-        window.dispatchEvent(new CustomEvent("cartUpdated")); 
+        window.dispatchEvent(new CustomEvent("cartUpdated"));
       }
     }
   };
@@ -134,7 +143,7 @@ useEffect(() => {
                 <td>
                   <Button
                     variant="danger"
-                    onClick={() => handleRemoveFromCart(item.product._id)}
+                    onClick={() => handleRemoveFromCart(item.product._id, cartId)}
                   >
                     Remove
                   </Button>
