@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { getUserInfo, updateUserProfile } from "../utils/api";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -14,6 +15,7 @@ const Profile = () => {
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isProfileUpdated, setIsProfileUpdated] = useState(true); 
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 useEffect(() => {
   const fetchUserInfo = async () => {
@@ -39,8 +41,14 @@ useEffect(() => {
   };
 
   const handleEmailChange = (e) => {
-    setNewEmail(e.target.value);
-    setIsProfileUpdated(false); 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    const value = e.target.value;
+    if (isSubmitting && !emailRegex.test(value)) {
+      console.error("Invalid email format");
+    } else {
+      setNewEmail(value);
+      setIsProfileUpdated(false);
+    }
   };
 
   const handlePasswordChange = (e) => {
@@ -50,6 +58,7 @@ useEffect(() => {
 
  const handleProfileUpdate = async (e) => {
    e.preventDefault();
+   setIsSubmitting(true);
    try {
      
      const updatedUserInfo = await updateUserProfile({
@@ -112,6 +121,11 @@ useEffect(() => {
                     onChange={handleEmailChange}
                     placeholder={!user.email ? "Email" : ""}
                   />
+                  {newEmail && !emailRegex.test(newEmail) && (
+                    <Form.Text className="text-danger">
+                      Invalid email format
+                    </Form.Text>
+                  )}
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="formPassword">

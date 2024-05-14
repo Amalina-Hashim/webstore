@@ -49,6 +49,10 @@ const ProductDetail = () => {
   }, []);
 
   const handleToggleFavorite = async () => {
+    if (!isLoggedIn) {
+      navigate("/signup");
+      return;
+    }
     try {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
@@ -73,7 +77,11 @@ const ProductDetail = () => {
     }
   };
 
-const handleAddToCart = async () => {
+  const handleAddToCart = async () => {
+  if (!isLoggedIn) {
+    navigate("/signup");
+    return;
+  }
   try {
     const userId = localStorage.getItem("userId");
     const quantity = 1;
@@ -103,20 +111,16 @@ const handleAddToCart = async () => {
       >
         Back
       </Button>{" "}
-      {isLoggedIn && (
-        <>
-          <Button variant="success" onClick={handleAddToCart} className="mb-2">
-            Add to Cart
-          </Button>{" "}
-          <Button
-            variant={isFavorite ? "danger" : "outline-danger"}
-            onClick={handleToggleFavorite}
-            className="mb-2"
-          >
-            {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-          </Button>{" "}
-        </>
-      )}
+      <Button variant="success" onClick={handleAddToCart} className="mb-2">
+        Add to Cart
+      </Button>{" "}
+      <Button
+        variant={isFavorite ? "danger" : "outline-danger"}
+        onClick={handleToggleFavorite}
+        className="mb-2"
+      >
+        {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+      </Button>{" "}
       <div className="card mx-3">
         <div className="row g-0">
           <div className="col-md-4">

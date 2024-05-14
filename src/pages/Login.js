@@ -10,8 +10,19 @@ const Login = () => {
     password: "",
   });
 
+  const [emailError, setEmailError] = useState(""); 
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        setEmailError("Invalid email format");
+      } else {
+        setEmailError("");
+      }
+    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -48,6 +59,9 @@ const Login = () => {
             value={formData.email}
             onChange={handleChange}
           />
+          {emailError && (
+            <Form.Text className="text-danger">{emailError}</Form.Text>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { userSignup, userLogin } from "../utils/api"; // Import userLogin function
+import { userSignup, userLogin } from "../utils/api"; 
 import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -12,10 +12,20 @@ const Signup = () => {
     password: "",
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [emailError, setEmailError] = useState(""); 
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+      if (!emailRegex.test(value)) {
+        setEmailError("Invalid email format");
+      } else {
+        setEmailError("");
+      }
+    }
+    setFormData({ ...formData, [name]: value });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -62,6 +72,9 @@ const Signup = () => {
             value={formData.email}
             onChange={handleChange}
           />
+          {emailError && (
+            <Form.Text className="text-danger">{emailError}</Form.Text>
+          )}
         </Form.Group>
         <Form.Group controlId="formPassword">
           <Form.Label>Password</Form.Label>
