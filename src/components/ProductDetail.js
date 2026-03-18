@@ -9,6 +9,8 @@ import {
 } from "../utils/api";
 import { updateCartItemCount } from "../utils/cartUtils";
 
+const PLACEHOLDER_IMAGE = "https://via.placeholder.com/640x480?text=No+Image";
+
 const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -78,24 +80,24 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
-  if (!isLoggedIn) {
-    navigate("/signup");
-    return;
-  }
-  try {
-    const userId = localStorage.getItem("userId");
-    const quantity = 1;
-    await addToCart(userId, productId, quantity, (updatedCount) =>
-      setCartItemCount(updatedCount)
-    );
-    const newCount = parseInt(localStorage.getItem("cartItems") || "0");
-    setCartItemCount(newCount);
-    updateCartItemCount(setCartItemCount); 
-  } catch (error) {
-    console.error("Error adding to cart:", error);
-  }
-  window.dispatchEvent(new CustomEvent("cartUpdated"));
-};
+    if (!isLoggedIn) {
+      navigate("/signup");
+      return;
+    }
+    try {
+      const userId = localStorage.getItem("userId");
+      const quantity = 1;
+      await addToCart(userId, productId, quantity, (updatedCount) =>
+        setCartItemCount(updatedCount),
+      );
+      const newCount = parseInt(localStorage.getItem("cartItems") || "0");
+      setCartItemCount(newCount);
+      updateCartItemCount(setCartItemCount);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+    window.dispatchEvent(new CustomEvent("cartUpdated"));
+  };
 
   if (!product) {
     return <div>Loading...</div>;
@@ -125,9 +127,13 @@ const ProductDetail = () => {
         <div className="row g-0">
           <div className="col-md-4">
             <img
-              src={product.images[0]}
+              src={product?.images?.[0] || PLACEHOLDER_IMAGE}
               className="img-fluid rounded-start h-100"
               alt={product.name}
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.src = PLACEHOLDER_IMAGE;
+              }}
             />
           </div>
           <div className="col-md-8">

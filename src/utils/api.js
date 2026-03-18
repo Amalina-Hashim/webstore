@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const baseURL = "https://ecommerceapis-ro84.onrender.com/api";
+const baseURL =
+  process.env.REACT_APP_API_BASE_URL ||
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:5000/api"
+    : "https://ecommerceapis-ro84.onrender.com/api");
 
 const api = axios.create({
   baseURL,
@@ -39,7 +43,7 @@ export const addToFavorites = async (productId) => {
         productId: productId,
         userId: userId,
       },
-      options
+      options,
     );
     return response.data;
   } catch (error) {
@@ -64,7 +68,7 @@ export const removeFromFavorites = async (productId, token) => {
         productId: productId,
         userId: userId,
       },
-      options
+      options,
     );
     console.log("Entire Response Object:", response);
     return response.data;
@@ -88,7 +92,7 @@ export const userSignup = async (userData) => {
     localStorage.setItem("token", token);
     console.log(
       "Token stored in local storage:",
-      localStorage.getItem("token")
+      localStorage.getItem("token"),
     );
 
     const user = response.data.user;
@@ -129,19 +133,19 @@ export const userLogin = async (userData) => {
 
     console.log(
       "Token stored in local storage:",
-      localStorage.getItem("token")
+      localStorage.getItem("token"),
     );
     console.log(
       "User ID stored in local storage:",
-      localStorage.getItem("userId")
+      localStorage.getItem("userId"),
     );
     console.log(
       "User Name stored in local storage:",
-      localStorage.getItem("userName")
+      localStorage.getItem("userName"),
     );
     console.log(
       "Cart count stored in local storage:",
-      localStorage.getItem("cartItems")
+      localStorage.getItem("cartItems"),
     );
 
     return { token, userId, userName };
@@ -161,7 +165,7 @@ export const userLogout = async () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     localStorage.removeItem("cart");
@@ -182,7 +186,7 @@ export const addToCart = async (
   userId,
   productId,
   quantity,
-  setCartItemCount
+  setCartItemCount,
 ) => {
   try {
     const token = localStorage.getItem("token");
@@ -194,14 +198,14 @@ export const addToCart = async (
     const response = await api.post(
       "/cart/add-to-cart",
       { userId, productId, quantity },
-      options
+      options,
     );
     if (response) {
       const updatedCartData = response.data.cart.products;
       localStorage.setItem("cart", JSON.stringify(updatedCartData));
       const cartItemCount = updatedCartData.reduce(
         (total, item) => total + item.quantity,
-        0
+        0,
       );
       localStorage.setItem("cartItems", cartItemCount);
       setCartItemCount(cartItemCount);
@@ -265,7 +269,7 @@ export const removeFromCart = async (userId, productId, cartId) => {
     const response = await api.post(
       "/cart/remove-from-cart",
       { userId, productId, cartId },
-      headers
+      headers,
     );
     return response.data;
   } catch (error) {
@@ -326,7 +330,7 @@ export const getFavoriteProducts = async () => {
 
     const response = await api.get(
       `/products/favorites?userId=${userId}`,
-      options
+      options,
     );
     console.log("Entire Response Object:", response);
 

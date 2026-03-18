@@ -3,6 +3,8 @@ import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { getFavoriteProducts } from "../utils/api";
 
+const PLACEHOLDER_IMAGE = "https://via.placeholder.com/640x480?text=No+Image";
+
 const FavoriteList = ({ userId }) => {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,24 +37,22 @@ const FavoriteList = ({ userId }) => {
           {favoriteProducts.length > 0 ? (
             favoriteProducts.map((product, index) => (
               <div key={index} className="col-md-4 mb-4">
-                <Card
-                  key={product._id} 
-                  style={{ cursor: "pointer" }}
-                >
+                <Card key={product._id} style={{ cursor: "pointer" }}>
                   <Card.Img
                     variant="top"
-                    src={product.images[0]}
+                    src={product?.images?.[0] || PLACEHOLDER_IMAGE}
                     alt={product.name}
+                    loading="lazy"
+                    onError={(event) => {
+                      event.currentTarget.src = PLACEHOLDER_IMAGE;
+                    }}
                   />
                   <Card.Body>
                     <Card.Title>{product.name}</Card.Title>
-                    <Card.Text>${product.price}</Card.Text>
-                    <Link
-                      to={{
-                        pathname: `/products/${product._id}`,
-                        state: { product },
-                      }}
-                    >
+                    <Card.Text>
+                      ${Number(product.price || 0).toFixed(2)}
+                    </Card.Text>
+                    <Link to={`/products/${product._id}`} state={{ product }}>
                       <Button variant="primary">View Details</Button>
                     </Link>
                   </Card.Body>
