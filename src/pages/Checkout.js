@@ -20,7 +20,6 @@ const Checkout = () => {
     event.preventDefault();
     console.log("Form submitted");
     console.log("OrderId:", orderId, "Total Amount:", totalAmount);
-    const amount = totalAmount;
     navigate("/payment", { state: { orderId, totalAmount } });
   };
 

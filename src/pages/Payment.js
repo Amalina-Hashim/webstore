@@ -7,7 +7,6 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { totalAmount, orderId } = location.state || {};
-  const [shouldTriggerRefresh, setShouldTriggerRefresh] = useState(true);
 
   console.log("Location state:", location.state);
 
@@ -60,13 +59,7 @@ const Payment = () => {
 
         await makePayment(paymentData);
 
-        const shouldTriggerRefresh = true;
-
-        if (shouldTriggerRefresh) {
-          window.location.href = "/order-status"; 
-        } else {
-          navigate("/order-status", { replace: true }); 
-        }
+        navigate("/order-status", { replace: true });
       } else {
         console.error("Cart data not found.");
       }

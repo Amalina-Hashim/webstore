@@ -16,7 +16,6 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cartItemCount, setCartItemCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      updateCartItemCount(setCartItemCount);
+      updateCartItemCount(() => {});
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -56,7 +55,6 @@ const ProductDetail = () => {
       return;
     }
     try {
-      const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
       const updatedIsFavorite = !isFavorite;
       setIsFavorite(updatedIsFavorite);
@@ -87,12 +85,8 @@ const ProductDetail = () => {
     try {
       const userId = localStorage.getItem("userId");
       const quantity = 1;
-      await addToCart(userId, productId, quantity, (updatedCount) =>
-        setCartItemCount(updatedCount),
-      );
-      const newCount = parseInt(localStorage.getItem("cartItems") || "0");
-      setCartItemCount(newCount);
-      updateCartItemCount(setCartItemCount);
+      await addToCart(userId, productId, quantity, () => {});
+      updateCartItemCount(() => {});
     } catch (error) {
       console.error("Error adding to cart:", error);
     }

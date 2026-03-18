@@ -233,7 +233,11 @@ export const makePayment = async (paymentData) => {
       },
     };
 
-    const response = await api.post("/payment/make-payment", paymentData);
+    const response = await api.post(
+      "/payment/make-payment",
+      paymentData,
+      options,
+    );
 
     console.log("Payment data sent to Stripe:", paymentData);
     localStorage.removeItem("cart");
